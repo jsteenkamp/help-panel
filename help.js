@@ -1,3 +1,5 @@
+import angular from 'angular';
+
 import './styles.css!';
 
 // initial help template to load
