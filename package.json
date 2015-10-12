@@ -1,0 +1,19 @@
+{
+  "name": "help-panel",
+  "version": "1.0.0",
+  "description": "Integrated Help Component",
+  "main": "help.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsteenkamp/help-panel.git"
+  },
+  "author": "J Steenkamp",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jsteenkamp/help-panel/issues"
+  },
+  "homepage": "https://github.com/jsteenkamp/help-panel#readme"
+}
