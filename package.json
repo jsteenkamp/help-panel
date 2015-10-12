@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jsteenkamp/help-panel/issues"
   },
-  "homepage": "https://github.com/jsteenkamp/help-panel#readme"
+  "homepage": "https://github.com/jsteenkamp/help-panel#readme",
+  "dependencies": {
+    "angular": "github:angular/bower-angular@^1.4.6"
+  }
 }

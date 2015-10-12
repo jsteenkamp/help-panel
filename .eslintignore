@@ -1,0 +1,9 @@
+# ESLint Ignore Globs
+# Note: node_modules are ignored by default
+
+jspm_packages/**
+gulpfile.js
+package.json
+config.js
+
+server/**
