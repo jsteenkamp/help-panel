@@ -11,7 +11,7 @@ const helpStart = 'index.md';
  * @param config
  * @param $sce
  */
-const service = ($http, config, $sce) => ({
+const service = ($http, $sce) => ({
   // open/close panel
   showPanel: false,
   // will be set based on content title
@@ -24,6 +24,7 @@ const service = ($http, config, $sce) => ({
   searchResults: [],
   // language - this could be done via provider on help service
   language: 'en',
+  api: '/api',
   query: '',
 
   getContent(link) {
@@ -33,7 +34,7 @@ const service = ($http, config, $sce) => ({
       this.searchResults.length = 0;
     }
 
-    $http.get(config.api + '/help/' + this.language + '/' + link).then((result) => {
+    $http.get(this.api + '/help/' + this.language + '/' + link).then((result) => {
       this.showSearch = link === helpStart;
       this.showBack = !!this.searchResults.length;
       this.showResults = false;
@@ -46,7 +47,7 @@ const service = ($http, config, $sce) => ({
 
   getSearch(criteria) {
     this.showBack = false;
-    $http.post(config.api + '/help/search', {lang: this.language, criteria: criteria}).then((result) => {
+    $http.post(this.api + '/help/search', {lang: this.language, criteria: criteria}).then((result) => {
       this.showResults = true;
       this.searchResults = result.data;
     }, (error) => {
@@ -165,13 +166,15 @@ const panel = (HelpService) => ({
       this.searchString = '';
       // could config language on service
       HelpService.language = this.lang;
+      HelpService.api = this.api;
       // we could use different approaches to load initial content
       HelpService.getContent();
     }
 
   }),
   bindToController: {
-    lang: '=lang'
+    lang: '=lang',
+    api: '=api'
   },
   scope: {},
   link(scope, elem, attrs, ctrl) {
@@ -206,7 +209,7 @@ const panel = (HelpService) => ({
 // keep this as independent module
 
 export default angular.module('app.component.help', [])
-  .service('HelpService', ['$http', 'config', '$sce', service])
+  .service('HelpService', ['$http', '$sce', service])
   .directive('dHelpDisplay', ['HelpService', context])
   .directive('dHelpToggle', ['HelpService', toggle])
   .directive('dHelp', ['HelpService', panel])
