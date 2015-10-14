@@ -8,7 +8,6 @@ const helpStart = 'index.md';
 /**
  *  Help Service
  * @param $http
- * @param config
  * @param $sce
  */
 const service = ($http, $sce) => ({
@@ -66,9 +65,8 @@ const service = ($http, $sce) => ({
   },
 
   contextualOpen(link) {
-    let helpLink = link + '.md';
     this.showPanel = true;
-    this.getContent(helpLink);
+    this.getContent(link);
   }
 });
 
@@ -207,7 +205,6 @@ const panel = (HelpService) => ({
 
 
 // keep this as independent module
-
 export default angular.module('app.component.help', [])
   .service('HelpService', ['$http', '$sce', service])
   .directive('dHelpDisplay', ['HelpService', context])
