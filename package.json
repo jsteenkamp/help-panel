@@ -10,13 +10,13 @@
     "type": "git",
     "url": "git+https://github.com/jsteenkamp/help-panel.git"
   },
-  "author": "J Steenkamp",
+  "author": "Johan Steenkamp",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jsteenkamp/help-panel/issues"
   },
   "homepage": "https://github.com/jsteenkamp/help-panel#readme",
   "dependencies": {
-    "angular": "github:angular/bower-angular@^1.4.6"
+    "angular": "github:angular/bower-angular@^1.4.7"
   }
 }

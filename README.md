@@ -1,5 +1,5 @@
-## Test Component
+## Help Panel Component
 
-Test distributing Angular 1 component using npm.
+This is a test module for distributing components using npm.
 
-Module is imported using jspm.
+This package does not include the server code.
