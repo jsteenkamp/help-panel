@@ -1,6 +1,6 @@
 {
   "name": "help-panel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Integrated Help Component",
   "main": "help.js",
   "scripts": {
