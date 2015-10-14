@@ -65,6 +65,7 @@ const service = ($http, $sce) => ({
   },
 
   contextualOpen(link) {
+    this.searchResults.length = 0;
     this.showPanel = true;
     this.getContent(link);
   }
