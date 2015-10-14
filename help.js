@@ -35,7 +35,7 @@ const service = ($http, $sce) => ({
 
     $http.get(this.api + '/help/' + this.language + '/' + link).then((result) => {
       this.showSearch = link === helpStart;
-      this.showBack = !!this.searchResults.length;
+      this.showBack = link !== helpStart;
       this.showResults = false;
       this.contentHTML = $sce.trustAsHtml(result.data);
     }, (error) => {
@@ -136,8 +136,12 @@ const panel = (HelpService) => ({
 
     // display search results
     backHandler($event) {
-      HelpService.showSearch = true;
-      HelpService.showResults = true;
+      if (HelpService.searchResults.length) {
+        HelpService.showSearch = true;
+        HelpService.showResults = true;
+      } else {
+        HelpService.getContent('index.md');
+      }
     },
 
 
