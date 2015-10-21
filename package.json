@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/jsteenkamp/help-panel#readme",
   "dependencies": {
-    "angular": "github:angular/bower-angular@^1.4.7",
-    "lodash": "npm:lodash@^3.10.1"
+    "angular": "github:angular/bower-angular@1.4.7",
+    "lodash": "npm:lodash@3.10.1"
   }
 }
