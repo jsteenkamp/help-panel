@@ -10,6 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/jsteenkamp/help-panel.git"
   },
+  "registry": "npm",
   "author": "Johan Steenkamp",
   "license": "MIT",
   "bugs": {
