@@ -1,4 +1,8 @@
+// Dependencies - d-trap-scroll attribute directive is used to hide scrollbars and focus scroll
+
+
 import angular from 'angular';
+import _ from 'lodash';
 
 import './styles.css!';
 
@@ -17,7 +21,6 @@ const service = ($http, $sce) => ({
   panelTitle: 'Help',
   // show/hide search
   showSearch: true,
-  showBack: false,
   showResults: false,
   contentHTML: '',
   searchResults: [],
@@ -25,17 +28,39 @@ const service = ($http, $sce) => ({
   language: 'en',
   api: '/api',
   query: '',
+  // simple state tracking for back button
+  navStack: [],
+  currentPage: {type: 'page', data: helpStart},
+
+
+  setCurrentPage(page) {
+    console.log('add', this.navStack, page);
+    this.navStack.push(this.currentPage);
+    this.currentPage = page;
+  },
+
+
+  getBack(){
+    return this.navStack.pop();
+  },
+
+
+  showBack(){
+    return !!this.currentPage.data;
+  },
+
 
   getContent(link) {
 
-    if (!link){
+    if (!link || link === helpStart){
       link = helpStart;
       this.searchResults.length = 0;
+      this.navStack.length = 0;
+      this.currentPage = '';
     }
 
     $http.get(this.api + '/help/' + this.language + '/' + link).then((result) => {
       this.showSearch = link === helpStart;
-      this.showBack = link !== helpStart;
       this.showResults = false;
       this.contentHTML = $sce.trustAsHtml(result.data);
     }, (error) => {
@@ -44,8 +69,8 @@ const service = ($http, $sce) => ({
     });
   },
 
+
   getSearch(criteria) {
-    this.showBack = false;
     $http.post(this.api + '/help/search', {lang: this.language, criteria: criteria}).then((result) => {
       this.showResults = true;
       this.searchResults = result.data;
@@ -55,14 +80,18 @@ const service = ($http, $sce) => ({
     });
   },
 
+
   closePanel($event) {
+    this.navStack.length = 0;
     $event.stopImmediatePropagation();
     this.showPanel = false;
   },
 
+
   togglePanel() {
     this.showPanel = !this.showPanel;
   },
+
 
   contextualOpen(link) {
     this.searchResults.length = 0;
@@ -122,6 +151,8 @@ const toggle = (HelpService) => ({
 });
 
 
+// used to name directive and directive CSS class name (myDirectiveName and CSS class .my-directive-name)
+const componentName = 'dHelp';
 
 /**
  * dHelp directive
@@ -135,13 +166,23 @@ const panel = (HelpService) => ({
     // help content markup
     HelpService,
 
+
     // display search results
     backHandler($event) {
-      if (HelpService.searchResults.length) {
-        HelpService.showSearch = true;
-        HelpService.showResults = true;
+      $event.stopImmediatePropagation();
+      let back = HelpService.getBack();
+      if (back) {
+        console.log(HelpService.navStack);
+        console.log('back', back.data);
+        if (back.type === 'search'){
+          HelpService.showSearch = true;
+          HelpService.showResults = true;
+          HelpService.getSearch(back.data); // criteria
+        } else {
+          HelpService.getContent(back.data);
+        }
       } else {
-        HelpService.getContent('index.md');
+        HelpService.getContent(helpStart);
       }
     },
 
@@ -151,6 +192,7 @@ const panel = (HelpService) => ({
       $event.stopImmediatePropagation();
       let helpLink = $event.target.dataset.link;
       if (helpLink) {
+        HelpService.setCurrentPage({type: 'page', data: helpLink});
         HelpService.getContent(helpLink);
       }
       return false;
@@ -160,6 +202,7 @@ const panel = (HelpService) => ({
     // search action
     searchAction($event) {
       $event.stopImmediatePropagation();
+      HelpService.setCurrentPage({type: 'search', data: this.searchString});
       HelpService.getSearch(this.searchString);
     },
 
@@ -170,8 +213,9 @@ const panel = (HelpService) => ({
       // could config language on service
       HelpService.language = this.lang;
       HelpService.api = this.api;
+      HelpService.navStack.length = 0;
       // we could use different approaches to load initial content
-      HelpService.getContent();
+      HelpService.getContent(helpStart);
     }
 
   }),
@@ -181,32 +225,40 @@ const panel = (HelpService) => ({
   },
   scope: {},
   link(scope, elem, attrs, ctrl) {
+    // add component specific class-name to component element
+    elem.addClass(_.kebabCase(componentName));
     ctrl.init();
   },
   template: `
-     <panel-wrapper ng-if="ctrl.HelpService.showPanel">
+     <div class="help-wrapper" ng-if="ctrl.HelpService.showPanel">
          <header>
            <ul>
              <li><h2><a ng-click="ctrl.init()" aria-label="Help Index">{{ctrl.HelpService.panelTitle}}</a></h2></li>
-             <li ng-if="ctrl.HelpService.showBack"><a class="back" ng-click="ctrl.backHandler($event)" aria-label="Search results"></a></li>
+             <li ng-show="ctrl.HelpService.showBack()">
+              <a class="back" ng-click="ctrl.backHandler($event)" aria-label="Back to previous page"></a>
+             </li>
              <li><a class="close" ng-click="ctrl.HelpService.closePanel($event)" aria-label="Close Help"></a></li>
            </ul>
          </header>
-         <panel-content d-trap-scroll>
+         <help-content d-trap-scroll>
             <section role="search" ng-if="ctrl.HelpService.showSearch">
                 <input type="search" ng-model="ctrl.searchString" />
                 <button type="button" ng-click="ctrl.searchAction($event)" ng-disabled="!ctrl.searchString">Search</button>
             </section>
             <main ng-click="ctrl.contentClickHandler($event)" ng-switch="ctrl.HelpService.showResults">
               <div ng-switch-when="false" ng-bind-html="ctrl.HelpService.contentHTML"></div>
-              <ul>
-                <li ng-switch-when="true" ng-repeat="result in ctrl.HelpService.searchResults"><a data-link="{{result.id}}">{{result.title}}</a></li>
+              <div ng-switch-when="true" class="help-content item-list">
+              <ul ng-switch="!!ctrl.HelpService.searchResults.length">
+                <li ng-switch-when="true" ng-repeat="result in ctrl.HelpService.searchResults">
+                  <a data-link="{{result.id}}">{{result.title}}</a>
+                </li>
+                <li ng-switch-when="false">No results</li>
               </ul>
+              </div>
             </main>
-         </panel-content>
-     </panel-wrapper>`
+         </help-content>
+     </div>`
 });
-
 
 
 // keep this as independent module
@@ -214,5 +266,5 @@ export default angular.module('app.component.help', [])
   .service('HelpService', ['$http', '$sce', service])
   .directive('dHelpDisplay', ['HelpService', context])
   .directive('dHelpToggle', ['HelpService', toggle])
-  .directive('dHelp', ['HelpService', panel])
+  .directive(componentName, ['HelpService', panel])
   .name;

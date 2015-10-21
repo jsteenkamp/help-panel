@@ -1,0 +1,358 @@
+// Using global SCSS variables? Import them here - not using SCSS
+//@import '../../styles/variables';
+
+$primary-normal: #55798d;
+$primary-focus: #459cbf;
+$primary-active: #55ade0;
+$primary-text: #fff;
+$primary-disabled: #ccc;
+$primary-disabled-text: #989898;
+
+$secondary-normal: #fff;
+$secondary-focus: #eee;
+$secondary-active: #acacac;
+$secondary-text: #272727;
+$secondary-disabled: #ccc;
+$secondary-disabled-text: #989898;
+
+// help specific
+
+$help-header-title: #878787;
+$help-header-icons: #878787;
+$help-text: #676767;
+
+$help-list-heading: #878787;
+
+$help-wrapper-width: 710px; // 710px (Google Help)
+$help-wrapper-top: 56px;
+$help-header-height: 48px;
+$scrollbar-width: 16px;
+
+$content-alt-heading: #676767;
+
+// element based selector automatically added class
+.d-help {
+
+  // you can use absolute, fixed ties layout to browser viewport
+  .help-wrapper {
+    position: fixed;
+    top: $help-wrapper-top;
+    right: 0;
+    bottom: 0;
+    width: $help-wrapper-width;
+    background: #f7f7f7;
+    overflow: hidden;
+    z-index: 20 !important;
+    // equivalent to .md-whiteframe-z3
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.14), 0 6px 10px 0 rgba(0, 0, 0, 0.098), 0 1px 18px 0 rgba(0, 0, 0, 0.084);
+
+    // fixed header
+    header {
+      position: absolute;
+      top: 0;
+      width: $help-wrapper-width;
+      height: $help-header-height;
+      background: #fff;
+      border-bottom: 2px solid #e4e4e4;
+      z-index: 5;
+
+      ul {
+        display: table;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        li {
+          display: table-cell;
+          padding: 0 8px;
+          &:first-child {
+            width: 100%;
+          }
+          &:last-child {
+            padding-right: 16px;
+          }
+        }
+      }
+
+      h2 {
+        float: left;
+        margin: 0 0 0 8px;
+        padding: 0;
+        color: $help-header-title;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: $help-header-height;
+        a {
+          cursor: pointer;
+          color: $help-header-title;
+          text-decoration: none;
+        }
+      }
+
+      // inline icons so there is no md or other dependency
+
+      %icons {
+        display: block;
+        float: right;
+        width: 24px;
+        height: 24px;
+        margin: 12px 0;
+        line-height: $help-header-height;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .close {
+        @extend %icons;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="#{$help-header-icons}" height="24" viewBox="0 0 24 24" width="24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat;
+      }
+
+      .back {
+        @extend %icons;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="#{$help-header-icons}" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>') no-repeat;
+      }
+
+    }
+
+    // scroll panel with hidden scroll bar
+    help-content {
+      position: absolute;
+      top: $help-header-height;
+      right: -$scrollbar-width;
+      width: calc(100% + #{$scrollbar-width}); // hide scroll bar
+      height: calc(100% - #{$help-header-height}); // ensure we scroll to bottom of panel
+      overflow-y: scroll; // force scrollbar so it does not affect layout of other items
+      overflow-x: hidden;
+
+      section[role="search"] {
+        position: relative;
+        width: 100%;
+        background: #f7f7f7;
+        border-bottom: 1px solid #e5e5e5;
+
+        input {
+          box-sizing: border-box;
+          width: $help-wrapper-width - $scrollbar-width - 16px; // account for hidden scrollbar and match 16px left margin
+          height: 32px;
+          margin: 16px 0 16px 16px;
+          padding: 4px 8px;
+          background: rgba(85, 173, 224, 0.05);
+          border: 1px solid #d7d7d7;
+          color: #373737;
+        }
+
+        // if you prefer to use an icon - change markup button type="image"
+        /*
+        button {
+          position: absolute;
+          right: 22px;
+          top: 20px;
+          width: 24px;
+          height: 24px;
+          border: none;
+          background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="#c6cbd2" height="24" viewBox="0 0 24 24" width="24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+          text-indent: -9999px;
+          &:hover {
+            cursor: pointer;
+          };
+        }
+        */
+
+        // if you prefer a button with text
+        button {
+          position: absolute;
+          right: 22px;
+          top: 20px; // adjust if you change margin around input
+          height: 24px;
+          padding: 2px 8px;
+          font-size: 12px;
+          font-weight: 600;
+          color: $primary-text;
+          text-transform: uppercase;
+          background: $primary-normal;
+          border: none;
+          &:disabled {
+            color: $primary-disabled-text;
+            background: $primary-disabled;
+          }
+        }
+
+      }
+
+      // main content wrapper, content styles go here
+
+      main {
+        position: relative;
+        float: left;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 8px 16px;
+
+        // markdown content styling - can use template class
+        .help-content {
+
+          color: $help-text;
+          p, li {
+            color: $help-text;
+          }
+
+          %headings {
+            color: $primary-normal;
+            font-weight: 400;
+            line-height: 1.2rem;
+            margin: 16px 0;
+          }
+
+          h1 {
+            @extend %headings;
+            font-size: 28px;
+            line-height: 1.5rem;
+            margin: 1rem 0 .2rem;
+          }
+
+          h2 {
+            @extend %headings;
+            font-size: 22px;
+            margin: 2.5rem 0 0.5rem;
+          }
+
+          h3 {
+            @extend %headings;
+            font-size: 18px;
+            margin: 2.5rem 0 0.5rem;
+          }
+
+          h4 {
+            @extend %headings;
+            line-height: 1rem;
+            font-size: 18px;
+            margin: 2rem 0 .2rem;
+          }
+
+          %alt-headings {
+            color: $content-alt-heading;
+            font-weight: 600;
+            line-height: 1.2rem;
+          }
+
+          h5 {
+            @extend %alt-headings;
+            font-size: 16px;
+            margin: 16px 0 0;
+          }
+
+          // use H6 for additional items
+          h6 {
+            @extend %alt-headings;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin: 32px 0 0;
+          }
+
+
+          li {
+            line-height: 1.5rem;
+            a {
+              color: $primary-normal;
+              cursor: pointer;
+              &:link, &:visited {
+                color: $primary-normal;
+                cursor: pointer;
+              }
+              &:hover {
+                color: $primary-active;
+                text-decoration: underline;
+              }
+              &:active {
+                color: $primary-active;
+              }
+            }
+          }
+
+          &.item-list {
+
+            h2 {
+              color: $help-list-heading;
+              font-size: 18px;
+              margin: 8px 0 12px;
+            }
+
+            ul {
+              margin: 0 0 32px 0;
+              padding: 0;
+
+              li {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                border-bottom: 1px solid #eaeaea;
+                font-size: 16px;
+                line-height: 2rem;
+
+                a {
+                  color: $primary-normal;
+                  &:link, &:visited {
+                    color: $primary-normal;
+                  }
+                  &:hover {
+                    color: $primary-active;
+                    cursor: pointer;
+                  }
+                  &:active {
+                    color: $primary-active;
+                  }
+                ;
+                }
+              }
+            }
+          }
+
+          // need solution for image widths
+          img {
+            max-width: 100%;
+            border: 1px solid #d7d7d7;
+          }
+
+
+          // icons (svg)
+          img[src*="/icons/"] {
+            margin-bottom: -6px;
+            border: none;
+          }
+
+
+          table {
+            border-collapse: collapse;
+            width: 100%;
+            thead {
+              tr {
+                border-top: 2px solid #d7d7d7;
+                border-bottom: 2px solid #d7d7d7;
+              }
+              th {
+                color: #676767;
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+                text-align: left;
+                padding: 8px;
+              }
+            }
+            tbody {
+              tr:last-child {
+                border-bottom: 2px solid #d7d7d7;
+              }
+              td {
+                padding: 4px 8px;
+              }
+            }
+          }
+
+        }
+
+      }
+
+    }
+  }
+}
+
