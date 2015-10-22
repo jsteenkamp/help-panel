@@ -1,9 +1,9 @@
 // Dependencies - d-trap-scroll attribute directive is used to hide scrollbars and focus scroll
 
-import angular from 'angular';
-import _ from 'lodash';
+//import angular from 'angular';
+//import _ from 'lodash';
 
-//import './styles.css!';
+import './styles.css!';
 
 // initial help template to load
 const helpStart = 'index.md';
