@@ -2,10 +2,7 @@
   "name": "help-panel",
   "version": "1.0.3",
   "description": "Integrated Help Component",
-  "main": [
-    "dist/help.js",
-    "dist/styles.css"
-  ],
+  "main": "dist/help.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,9 +20,6 @@
   "dependencies": {
     "angular": "^1.4.7",
     "lodash": "^3.10.1"
-  },
-  "jspm": {
-    "main": ["dist/help", "dist/styles.css"]
   },
   "devDependencies": {
     "babel": "babel-core@^5.8.24",
