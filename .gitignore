@@ -1,24 +1,8 @@
-# System Files
 .DS_Store
-
-# Editor Files
-/.idea/
-
-
-# Build / Deploy Folder
-/server/public
-/server/help
-
-# Temp Files
-/.tmp
-
-# Auto Generated Files
+.idea
 *.map
+node_modules
+jspm_packages
 
-# Node Modules/Dependencies
-/node_modules
-/jspm_packages
-
-# GitKeep
-# To allow empty folders to be committed.
+# GitKeep allow empty folders to be committed
 !.gitkeep

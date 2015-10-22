@@ -2,9 +2,7 @@
   "name": "help-panel",
   "version": "1.0.3",
   "description": "Integrated Help Component",
-  "main": [
-    "dist/help.js"
-  ],
+  "main": "dist/help.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
