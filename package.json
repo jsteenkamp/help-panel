@@ -27,5 +27,17 @@
     "clean-css": "^3.4.6",
     "core-js": "^1.1.4",
     "css": "github:systemjs/plugin-css@^0.1.14"
+  },
+  "jspm": {
+    "files": [
+      "./dist/help.js",
+      ".dist/styles.css"
+    ],
+    "map": {
+      "help": "./dist/help"
+    },
+    "buildConfig": {
+      "uglify": true
+    }
   }
 }
